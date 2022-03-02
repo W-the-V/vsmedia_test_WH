@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //save entry
     add_save.addEventListener('click', (e) => {
-        if(add_first.value !== '' && add_last.value !== '') {
+        if(add_first.value !== '' && add_last.value !== '' && /^[A-Za-z\s]*$/.test(add_last.value) && (/^[A-Za-z\s]*$/.test(add_first.value))) {
             //combine inputs to full name
             list_builder.add(add_first.value + " " + add_last.value)
             //clear fields for when next adding an entry
