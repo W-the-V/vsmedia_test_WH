@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./JavaScript/main.js" defer></script>
+    <script src="./JavaScript/list_builder.js" defer></script>
+    <link rel="stylesheet" href="./styling.css">
+    <title>Listed</title>
+</head>
+<body>
+    <div class="outer_shell">
+        <div class="header">
+            <h1 class="title">Listed</h1>
+        </div>
+        <div class="list_shell">
+            <div class="sorted_bar">
+                <div class="sorted_shell">
+                    <h3 class="sorted_title">Sorted by: </h3>
+                    <div class="button_shell">
+                        <button class="li_button active" id="order_first">First Name</button>
+                        <button class="li_button" id="order_last">Last Name</button>
+                    </div>
+                </div>
+                <div class="sorted_shell">
+                    <h3 class="sorted_title">Order: </h3>
+                    <div class="button_shell">
+                        <button class="li_button active" id="asc">Ascending</button>
+                        <button class="li_button" id="dsc">Descending</button>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="list_inner">
+            </div>
+            <button class="add_button">Add New Entry</button>
+            <div class="add_form hidden">
+                <input class="add_input add_first" placeholder="First Name...">
+                <input class="add_input add_last" placeholder="Last Name...">
+                <button class="add_save li_button button_disabled">Save</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
