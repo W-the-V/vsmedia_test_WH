@@ -3,6 +3,7 @@ class List_Builder {
         this.list = [];
         this.sorted = 'asc'
         this.sorted_by = 'first'
+        //get seed data
         this.init()
     }
     
@@ -12,6 +13,7 @@ class List_Builder {
         data.forEach((item) => {
             let name = item.name
             if(name.split(" ").length >= 3) {
+                //sanitize input to ensure only first & last name
                 if (name.includes('Mrs.')) name = name.replace("Mrs. ", '')
                 if (name.includes('Ms.')) name = name.replace("Ms. ", '')
                 if (name.includes('Mr.')) name = name.replace("Mr. ", '')
@@ -24,14 +26,19 @@ class List_Builder {
             }
             this.list.push(name)
         }) 
+        //use seed data to build out list
         this.build()
     }
 
     build() {
         const list_shell = document.querySelector(".list_inner");
+        //clear existing list from page
         list_shell.innerText = '';
+        //sort list entries -> default first name ascending
         this.order()
+        //build list items then attach to list
         this.list.forEach((item, i) => {
+            //iterate over list & build list items
             let li = document.createElement("li");
             li.classList.add("li_shell");
             li.setAttribute("id", i)
@@ -39,18 +46,22 @@ class List_Builder {
             text.classList.add("li_text");
             text.innerText = item;
             li.appendChild(text)
+            //call to build buttons to build list buttons passing in index of list item
             li.appendChild(this.build_buttons(i))
             list_shell.appendChild(li);
         })
     }
 
     build_buttons(i) {
+        //build out edit & delete buttons 
         let button_shell = document.createElement("div");
         button_shell.classList.add("button_shell");
         let edit = document.createElement("button");
         edit.classList.add("li_button");
         edit.innerText = "Edit"
+        //add event listener to switch list entry w/ edit form
         edit.addEventListener("click", (e) => {
+            //call to build_edit to build edit form passing in full name & index
             let form = this.build_edit(this.list[i], i);
             let shell = document.getElementById(i);
             shell.innerText = '';
@@ -60,15 +71,18 @@ class List_Builder {
         let del = document.createElement("button");
         del.classList.add("li_button");
         del.innerText = "Delete"
+        //add event listener to call delete function
         del.addEventListener('click', () => {
             this.delete(i)
         })
         button_shell.appendChild(edit)
         button_shell.appendChild(del)
+        //returns completed button section
         return button_shell
     }
 
     build_edit(text, i) {
+        //builds out edit form
         let form = document.createElement("div")
         form.classList.add("edit_shell")
         let first_name = document.createElement('input')
@@ -82,35 +96,44 @@ class List_Builder {
         let save = document.createElement('button')
         save.classList.add('li_button')
         save.innerText = "Save"
+        //add event listener when input changes to disable or enable the save button
         first_name.addEventListener('input', () => {
-            if(first_name.value === '') {
+            //check if invalid input
+            if((first_name.value === '') || (!/^[A-Za-z\s]*$/.test(first_name.value))) {
                 save.disabled = true;
                 save.classList.add('button_disabled')
-            } else if (last_name.value !== '') {
+            } else if ((last_name.value !== '') && (/^[A-Za-z\s]*$/.test(last_name.value))) {
                 save.disabled = false;
                 save.classList = "li_button"
             }
         })
+        //add event listener when input changes to disable or enable the save button
         last_name.addEventListener('input', () => {
-            if(last_name.value === '') {
+            //check if invalid input
+            if((last_name.value === '') || (!/^[A-Za-z\s]*$/.test(last_name.value))) {
                 save.disabled = true;
                 save.classList.add('button_disabled')
-            } else if (first_name.value !== '') {
+            } else if ((first_name.value !== '') && (/^[A-Za-z\s]*$/.test(first_name.value))) {
                 save.disabled = false;
                 save.classList = "li_button"
             }
         })
         save.addEventListener("click", (e) => {
-            let full_name = document.querySelector(".first_name").value + " " + document.querySelector(".last_name").value
-            this.edit(i, full_name)
+            if (/^[A-Za-z\s]*$/.test(last_name.value) && /^[A-Za-z\s]*$/.test(first_name.value)) {
+                // join first & last names then add to list
+                let full_name = document.querySelector(".first_name").value + " " + document.querySelector(".last_name").value
+                this.edit(i, full_name)
+            }
         })
         form.appendChild(first_name)
         form.appendChild(last_name)
         form.appendChild(save)
+        //returns completed form
         return form
     }
 
     add(item) {
+        //add item to list then rebuilds list
         if (typeof(item) === "string"){
             this.list.push(item)
             this.build();
@@ -118,6 +141,7 @@ class List_Builder {
     }
 
     edit(i, update) {
+        //given index & new entry, updates entry then rebuilds list
         if (typeof(update) === "string"){
             this.list[i] = update;
             this.build()
@@ -125,11 +149,13 @@ class List_Builder {
     }
 
     delete(i) {
+        //given index, deletes entry then rebuilds list
         this.list.splice(i, 1)
         this.build()
     }
 
     order() {
+        //change the ordering of the list based on sorted (asc or dsc) & sortedBy (first / last name)
         if(this.sorted === 'asc') {
             if(this.sorted_by === 'first') {
                 this.list.sort((a, b) => a.split(" ")[0].localeCompare(b.split(" ")[0]))
